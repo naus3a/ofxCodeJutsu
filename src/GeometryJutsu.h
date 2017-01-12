@@ -46,10 +46,28 @@ namespace ofxCodeJutsu {
 		static float getSignedPlaneDistance(ofVec3f pt, float a, float b, float c, float d) {
 			return (a*pt.x+b*pt.y+c*pt.z+d);
 		}
+        
+        static float getUnsignedPlaneDistance(ofVec3f pt, float a, float b, float c, float d){
+            return abs(ofxCodeJutsu::Geometry::getSignedPlaneDistance(pt,a,b,c,d));
+        }
 
 		static bool isPointInFrontOfPlane(ofVec3f pt, float a, float b, float c, float d) {
 			return (ofxCodeJutsu::Geometry::getSignedPlaneDistance(pt, a, b, c, d) > 0);
 		}
-
+        
+        static ofVec3f middleOfSegment(ofVec3f p1, ofVec3f p2){
+            ofVec3f p = p2 - p1;
+            p/=2;
+            p += p1;
+            return p;
+        }
+        
+        static ofVec3f pointInTriangle(ofVec3f p1, ofVec3f p2, ofVec3f p3){
+            ofVec3f p = ofxCodeJutsu::Geometry::middleOfSegment(p1, p2);
+            p = ofxCodeJutsu::Geometry::middleOfSegment(p, p3);
+            return p;
+        }
+        
+        
 	}
 }

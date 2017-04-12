@@ -68,6 +68,46 @@ namespace ofxCodeJutsu {
             return p;
         }
         
-        
+        static int segmentIntersection2D(ofVec2f start0, ofVec2f end0, ofVec2f start1, ofVec2f end1, ofVec2f & collisionPt){
+            ofVec2f s02;
+            ofVec2f s10;
+            ofVec2f s32;
+            float s_numer;
+            float t_numer;
+            float denom;
+            float t;
+            
+            s10.x = end0.x-start0.x;
+            s10.y = end0.y-start0.y;
+            s32.x = end1.x-start1.x;
+            s32.y = end1.y-start1.y;
+            
+            denom = s10.x*s32.y-s32.x*s10.y;
+            if(denom==0){
+                return 0; //collinear
+            }
+            bool denomPositive = denom>0;
+            
+            s02.x = start0.x-start1.x;
+            s02.y = start0.y-start1.y;
+            s_numer = s10.x*s02.y-s10.y*s02.x;
+            if((s_numer<0)==denomPositive){
+                return 0; //no collision
+            }
+            
+            t_numer = s32.x*s02.y-s32.y*s02.x;
+            if((t_numer<0)==denomPositive){
+                return 0; //no collision
+            }
+            
+            if(((s_numer>denom)==denomPositive)||((t_numer>denom)==denomPositive)){
+                return 0; //no collision
+            }
+            
+            t = t_numer/denom;
+            collisionPt.x = start0.x+(t*s10.x);
+            collisionPt.y = start0.y+(t*s10.y);
+            return 1;
+        }
 	}
 }
